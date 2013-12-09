@@ -1,0 +1,39 @@
+#!/bin/sh
+max_counter=0
+while read line  
+do
+    distorted_line=$line
+    counter=0
+
+
+
+    while :
+        do
+            previous_distortion=$distorted_line
+            translated_line="`translate "$previous_distortion" ru en`"
+            printf " ( $translated_line ) "
+            distorted_line=`translate "$translated_line" en ru`
+
+            if [ "$previous_distortion" != "$distorted_line" ]
+            then
+                if [ $counter -eq 0 ] 
+                then
+                    printf "$line"
+                fi
+                counter=$(($counter+1 ))
+                printf " -> $distorted_line"
+            else 
+                echo
+                break
+            fi
+        done
+    if [ $max_counter -lt $counter ]
+    then
+        max_counter=$(($counter))
+    fi
+
+done 
+echo $max_counter
+
+
+
